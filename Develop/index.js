@@ -2,7 +2,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
-const generateMarkdown = require('./utils/generateMarkdown');
+
+const generateMarkdown = require('./util/generateMarkdown');
 
 // Array of questions for user input
 const questions = [
@@ -68,6 +69,7 @@ const questions = [
     {
         type: 'list',
         message: 'What licesnse would you like to use for your project?',
+        name: 'license',
         choices: ['MIT', 'Apache 2.0', 'GNU AGPLv3', 'GNU GPLv3', 'GNU GPLv3', 'Mozilla Public License 2.0', 'The Unlicense', 'None']
     },
     {
@@ -92,9 +94,10 @@ function writeToFile(fileName, data) {
 
 // TODO: Create a function to initialize app
 function init() {
-    inquirer.createPromptModule(questions).then(function (data) {
-        writeToFile('README.md', generatorMd(data));
-        console.log(data);
+    inquirer.prompt(questions)
+        .then(function (data) {
+             writeToFile('README.md', generateMarkdown(data));
+             console.log(data);
     })
 }
 
